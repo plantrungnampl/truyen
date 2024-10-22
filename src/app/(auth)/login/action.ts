@@ -1,6 +1,9 @@
 "use server";
 
-import { isRedirectError } from "next/dist/client/components/redirect";
+import {
+  isRedirectError,
+  // redirect,
+} from "next/dist/client/components/redirect";
 import { verify } from "@node-rs/argon2";
 import { lucia } from "@/auth";
 import { cookies } from "next/headers";
@@ -39,7 +42,8 @@ export async function Login(
     }
     const session = await lucia.createSession(exitingUser.id, {});
     const sessionCookies = lucia.createSessionCookie(session.id);
-    cookies().set(
+    const storedCookies = await cookies();
+    storedCookies.set(
       sessionCookies.name,
       sessionCookies.value,
       sessionCookies.attributes

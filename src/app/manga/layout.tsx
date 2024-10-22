@@ -1,20 +1,3 @@
-// import { validateRequest } from "@/auth";
-// import { redirect } from "next/navigation";
-// import SessionProvider from "./sessionProvider";
-
-// export default async function RootLayout({
-//   children,
-// }: {
-//   children: React.ReactNode;
-// }) {
-//   const session = await validateRequest();
-//   if (!session.user) redirect("/login");
-//   return (
-//     <SessionProvider value={session}>
-//       <div>{children}</div>
-//     </SessionProvider>
-//   );
-// }
 "use server";
 import { validateRequest } from "@/auth";
 // import Banner from "@/components/Banner";

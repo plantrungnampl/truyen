@@ -41,6 +41,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isLoggedIn) {
+      router.refresh();
       const timer = setTimeout(() => {
         router.push("/");
       }, 5000);

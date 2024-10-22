@@ -1,11 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    webpack: (config, { isServer }) => {
-        if (isServer) {
-            config.externals.push('@prisma/client')
-        }
-        return config
-    },
+    // webpack: (config, { isServer }) => {
+    //     if (isServer) {
+    //         config.externals.push('@prisma/client')
+    //     }
+    //     return config
+    // },
+
     images: {
         remotePatterns: [
             {
@@ -19,17 +20,20 @@ const nextConfig = {
                 hostname: 'uploads.mangadex.org',
                 port: '',
                 pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: "cmdxd98sb0x3yprd.mangadex.network",
+                port: '',
+                pathname: '/**',
             }
         ],
     },
 
-    experimental: {
-        staleTimes: {
-            dynamic: 30,
-            static: 180
-        },
-        serverComponentsExternalPackages: ["@node-rs/argon2"]
-    },
+    // experimental: {
+
+    serverExternalPackages: ["@node-rs/argon2"]
+    // },
 };
 
 export default nextConfig;

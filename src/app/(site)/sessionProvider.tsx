@@ -6,7 +6,7 @@ import { Session } from "lucia";
 import React, { createContext, useContext } from "react";
 interface User {
   id: string;
-  username?: string; // Dấu `?` nghĩa là thuộc tính này là tùy chọn
+  username?: string;
   email?: string;
   password?: string;
   createdAt?: Date;

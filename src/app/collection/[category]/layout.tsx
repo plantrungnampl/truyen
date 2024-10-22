@@ -48,7 +48,7 @@ export default async function RootLayout({
           </aside>
 
           {/* Main content */}
-          <main className="flex-1 overflow-y-auto lg:ml-64">
+          <main className="flex-1 overflow-y-auto lg:ml-64 mt-8">
             {/* Hero Section */}
             <div className="relative h-80 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500">
               <div className="absolute inset-0 bg-black opacity-50"></div>

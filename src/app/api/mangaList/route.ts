@@ -1,3 +1,4 @@
+"use server";
 import axios from "axios";
 import { NextResponse } from "next/server";
 
@@ -41,9 +42,8 @@ export async function GET(req: Request) {
           },
         }
       );
-      popularMangaData = popularRes.data;
+      popularMangaData = popularRes?.data;
     }
-    console.log("popular===", popularMangaData);
 
     // Fetch Seasonal: Summer 2024 manga
     let seasonalMangaData = null;
@@ -61,15 +61,18 @@ export async function GET(req: Request) {
           },
         }
       );
-      console.log("API Response Data:", seasonalRes.data);
-      seasonalMangaData = seasonalRes.data;
-      console.log("sessonak===", seasonalMangaData);
+      seasonalMangaData = seasonalRes?.data;
     }
 
     // Combine the two responses if needed
     const resultData =
       category === "seasonal" ? seasonalMangaData : popularMangaData;
-
+    if (!resultData || !Array.isArray(resultData.data)) {
+      return NextResponse.json(
+        { error: "Invalid data format from MangaDex API" },
+        { status: 500 }
+      );
+    }
     return NextResponse.json(resultData);
   } catch (err) {
     console.error(err);

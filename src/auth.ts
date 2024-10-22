@@ -1,8 +1,8 @@
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { Lucia, Session, User } from "lucia";
 import { cache } from "react";
-import { cookies } from "next/headers";
 import db from "./lib/db";
+import { cookies } from "next/headers";
 const adapter = new PrismaAdapter(db.session, db.user);
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
@@ -38,7 +38,8 @@ export const validateRequest = cache(
   async (): Promise<
     { user: User; session: Session } | { user: null; session: null }
   > => {
-    const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+    const cookiStored = await cookies();
+    const sessionId = cookiStored.get(lucia.sessionCookieName)?.value ?? null;
     if (!sessionId) {
       return {
         user: null,
@@ -51,7 +52,7 @@ export const validateRequest = cache(
     try {
       if (result.session && result.session.fresh) {
         const sessionCookies = lucia.createSessionCookie(result.session.id);
-        cookies().set(
+        cookiStored.set(
           sessionCookies.name,
           sessionCookies.value,
           sessionCookies.attributes
@@ -59,7 +60,7 @@ export const validateRequest = cache(
       }
       if (!result.session) {
         const sessionCookies = lucia.createBlankSessionCookie();
-        cookies().set(
+        cookiStored.set(
           sessionCookies.name,
           sessionCookies.value,
           sessionCookies.attributes

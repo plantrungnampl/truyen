@@ -9,146 +9,31 @@ datasource db {
 }
 
 model User {
-  id        String     @id @default(uuid()) // Chuyển từ Int sang String và sử dụng uuid
-  username  String
-  email     String     @unique
-  password  String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  comments  Comment[]
-  ratings   Rating[]
-  bookmarks Bookmark[]
-  Session   Session[]
+  id              String            @id @default(uuid()) // Chuyển từ Int sang String và sử dụng uuid
+  username        String
+  email           String            @unique
+  password        String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  Session         Session[]
+  ReadingProgress ReadingProgress[]
+}
+
+model ReadingProgress {
+  id            String   @id @default(uuid())
+  userId        String
+  mangaId       String
+  chapterNumber Int
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Thêm quan hệ với User
 }
 
 model Session {
-  id        String   @id // Sử dụng kiểu String cho id
-  userId    String // Chuyển userId sang kiểu String
+  id        String   @id
+  userId    String
   expiresAt DateTime
 
   user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 
   @@map("sessions")
-}
-
-model Author {
-  id        String   @id @default(uuid()) // Sử dụng kiểu String với uuid
-  name      String
-  bio       String?
-  manga     Manga[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Genre {
-  id        String       @id @default(uuid()) // Sử dụng kiểu String với uuid
-  name      String       @unique
-  manga     MangaGenre[]
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-}
-
-model Manga {
-  id          String       @id @default(uuid()) // Sử dụng kiểu String với uuid
-  title       String
-  description String
-  coverImage  String
-  status      MangaStatus  @default(ONGOING)
-  authorId    String // Chuyển authorId sang kiểu String
-  author      Author       @relation(fields: [authorId], references: [id])
-  chapters    Chapter[]
-  genres      MangaGenre[]
-  comments    Comment[]
-  ratings     Rating[]
-  bookmarks   Bookmark[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-
-  @@index([title])
-}
-
-model Chapter {
-  id          String    @id @default(uuid()) // Sử dụng kiểu String với uuid
-  title       String
-  number      Int
-  mangaId     String // Chuyển mangaId sang kiểu String
-  manga       Manga     @relation(fields: [mangaId], references: [id])
-  images      Image[]
-  comments    Comment[]
-  publishedAt DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  @@unique([mangaId, number])
-}
-
-model Comment {
-  id        String   @id @default(uuid()) // Sử dụng kiểu String với uuid
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    String // Chuyển userId sang kiểu String
-  user      User     @relation(fields: [userId], references: [id])
-  mangaId   String?
-  manga     Manga?   @relation(fields: [mangaId], references: [id])
-  chapterId String?
-  chapter   Chapter? @relation(fields: [chapterId], references: [id])
-
-  @@index([userId])
-  @@index([mangaId])
-  @@index([chapterId])
-}
-
-model Rating {
-  id        String   @id @default(uuid()) // Sử dụng kiểu String với uuid
-  score     Int
-  createdAt DateTime @default(now())
-  userId    String // Chuyển userId sang kiểu String
-  user      User     @relation(fields: [userId], references: [id])
-  mangaId   String // Chuyển mangaId sang kiểu String
-  manga     Manga    @relation(fields: [mangaId], references: [id])
-
-  @@unique([userId, mangaId])
-  @@index([mangaId])
-}
-
-model Bookmark {
-  id        String   @id @default(uuid()) // Sử dụng kiểu String với uuid
-  createdAt DateTime @default(now())
-  userId    String // Chuyển userId sang kiểu String
-  user      User     @relation(fields: [userId], references: [id])
-  mangaId   String // Chuyển mangaId sang kiểu String
-  manga     Manga    @relation(fields: [mangaId], references: [id])
-
-  @@unique([userId, mangaId])
-  @@index([userId])
-  @@index([mangaId])
-}
-
-model Image {
-  id         String  @id @default(uuid()) // Sử dụng kiểu String với uuid
-  url        String
-  pageNumber Int
-  chapterId  String // Chuyển chapterId sang kiểu String
-  chapter    Chapter @relation(fields: [chapterId], references: [id])
-
-  @@unique([chapterId, pageNumber])
-}
-
-model MangaGenre {
-  id      String @id @default(uuid()) // Sử dụng kiểu String với uuid
-  mangaId String // Chuyển mangaId sang kiểu String
-  genreId String // Chuyển genreId sang kiểu String
-  manga   Manga  @relation(fields: [mangaId], references: [id])
-  genre   Genre  @relation(fields: [genreId], references: [id])
-
-  @@unique([mangaId, genreId])
-  @@index([mangaId])
-  @@index([genreId])
-}
-
-enum MangaStatus {
-  ONGOING
-  COMPLETED
-  HIATUS
 }

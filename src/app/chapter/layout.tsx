@@ -1,8 +1,8 @@
+"use server";
 import { validateRequest } from "@/auth";
-import Banner from "@/components/Banner";
 import Navbar from "@/components/Navbar";
 import { redirect } from "next/navigation";
-import SessionProvider from "./sessionProvider";
+import SessionProvider from "../(site)/sessionProvider";
 
 export default async function RootLayout({
   children,
@@ -16,9 +16,9 @@ export default async function RootLayout({
     <SessionProvider value={session}>
       <div className="min-h-screen bg-gray-100">
         <Navbar />
-        <div className="max-w-7xl mx-auto w-full mt-16 ">
+        {/* <div className="max-w-7xl mx-auto w-full ">
           <Banner />
-        </div>
+        </div> */}
         <main className=" transition-all duration-300 ease-in-out bg-slate-200">
           <div className="max-w-7xl mx-auto  py-3 ">{children}</div>
         </main>

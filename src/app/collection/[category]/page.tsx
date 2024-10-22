@@ -2,9 +2,9 @@
 
 import { useInView } from "react-intersection-observer";
 import React, { useCallback, useEffect, useMemo } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/app/loading";
 import Error from "@/components/Error";
 import { MangaListAPIResponse, MangaListProps } from "@/types/type";
@@ -12,16 +12,34 @@ import { Button } from "@/components/ui/button";
 import { Clock, Loader2, Star, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import { fetchMangaDetail } from "@/lib/api";
 
 const CollectionPage: React.FC = () => {
   const params = useParams();
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const categories = params.category as "popular" | "new" | "trending";
-
+  // const id = params.id;
   const { ref, inView } = useInView({
     threshold: 0.5,
     triggerOnce: false,
   });
-
+  const handlePrefetch = useCallback(
+    (id: string) => {
+      console.log(`xem them prefetch ${id}`);
+      queryClient.prefetchQuery({
+        queryKey: [
+          "seasonalManga",
+          "mangaList",
+          "detailManga",
+          "mangaCollection",
+          id,
+        ],
+        queryFn: () => fetchMangaDetail(id),
+      });
+    },
+    [queryClient]
+  );
   const fetchMangaList = useCallback(
     async (pageParam: number): Promise<MangaListProps[]> => {
       const response = await fetch(
@@ -30,7 +48,6 @@ const CollectionPage: React.FC = () => {
           next: { revalidate: 3600 },
         }
       );
-      // if (!response.ok) throw new Error("Failed to fetch manga list");
       const data: MangaListAPIResponse = await response.json();
 
       return data.data.map((manga) => ({
@@ -138,10 +155,12 @@ const CollectionPage: React.FC = () => {
       opacity: 1,
     },
   };
-
+  const handleMangaClick = (id: string) => {
+    router.push(`/manga/${id}`);
+  };
   return (
     <motion.div
-      className="container mx-auto mt-8"
+      className="container mx-auto mt-8 "
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -172,6 +191,9 @@ const CollectionPage: React.FC = () => {
               key={`${manga.id}-${index}`}
               variants={itemVariants}
               layout
+              className="cursor-pointer"
+              onClick={() => handleMangaClick(manga.id)}
+              onMouseEnter={() => handlePrefetch(manga.id)}
             >
               <motion.div
                 className="bg-card text-card-foreground rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"

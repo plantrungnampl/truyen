@@ -1,3 +1,4 @@
+"use server";
 import SessionProvider from "@/app/(site)/sessionProvider";
 import { validateRequest } from "@/auth";
 import Navbar from "@/components/Navbar";

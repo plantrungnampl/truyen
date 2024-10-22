@@ -18,15 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className}  antialiased`}>
-        {/* <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-            > */}
         <ReactQueryProvider>{children}</ReactQueryProvider>
         <Toaster />
-        {/* </ThemeProvider> */}
       </body>
     </html>
   );

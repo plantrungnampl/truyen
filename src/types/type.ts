@@ -130,6 +130,7 @@ interface Attributes {
   latestUploadedChapter: string;
   chapter?: string;
   readableAt: string | number;
+  translatedLanguage: string;
 }
 
 // Interface for Relationships
@@ -160,4 +161,103 @@ export interface Response {
   response: string;
   data: Data;
   chapters: chapter[];
+  total: number;
+}
+// manga detail:
+// export interface MangaDetailResponse {
+//   data: {
+//     id: string;
+//     attributes: {
+//       title: {
+//         en: string;
+//       };
+//       description: {
+//         en: string;
+//       };
+//       // Các thuộc tính khác tùy theo API response
+//     };
+//     relationships: {
+//       id: string;
+//       type: string;
+//     }[];
+//   };
+// }
+
+// interface Chapter {
+//   id: string;
+//   attributes: {
+//     chapter: string;
+//     title: string;
+//     translatedLanguage: string;
+//     // Các thuộc tính khác của chap
+//   };
+// }
+
+// export interface ChapterDetailResponse {
+//   data: Chapter;
+// }
+
+// export interface ChaptersResponse {
+//   data: Chapter[];
+// }
+
+// chappter detail real:
+// Interface cho relationship của chapter
+interface Relationship {
+  id: string;
+  type: string;
+}
+
+// Interface cho attributes của chapter
+interface ChapterAttributes {
+  volume: string | null;
+  chapter: string;
+  title: string | null;
+  translatedLanguage: string;
+  externalUrl: string | null;
+  publishAt: string;
+  readableAt: string;
+  createdAt: string;
+  updatedAt: string;
+  pages: number;
+  version: number;
+}
+
+// Interface chính cho chi tiết chapter
+interface ChapterDetail {
+  id: string;
+  type: string;
+  attributes: ChapterAttributes;
+  relationships: Relationship[];
+}
+
+// Interface cho toàn bộ response
+export interface ChapterDetailResponse {
+  result: string;
+  response: string;
+  data: ChapterDetail;
+  pages: string[];
+}
+
+// pages cua 1 chapter
+// Interface cho dữ liệu của một chapter
+interface ChapterData {
+  hash: string;
+  data: string[]; // Danh sách các file hình ảnh chất lượng đầy đủ
+  dataSaver: string[]; // Danh sách các file hình ảnh tiết kiệm dữ liệu
+}
+
+// Interface chính cho phản hồi của chapter
+export interface ChapterResponse {
+  result: string;
+  baseUrl: string; // URL cơ sở để truy xuất các file hình ảnh
+  chapter: ChapterData; // Dữ liệu liên quan đến chapter
+}
+
+//pagination props
+export interface PaginationProps {
+  category: "popular" | "new" | "trending" | "seasonal";
+  fetchNextPage?: () => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
 }

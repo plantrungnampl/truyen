@@ -70,7 +70,8 @@ export const signup = async (
     //   sessionCookies.value,
     //   sessionCookies.attributes
     // );
-    cookies().set(sessionCookies.name, sessionCookies.value, {
+    const storedCookies = await cookies();
+    storedCookies.set(sessionCookies.name, sessionCookies.value, {
       ...sessionCookies.attributes,
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,

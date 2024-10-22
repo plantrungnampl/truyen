@@ -1,58 +1,105 @@
-"use client";
-import React from "react";
-import axios from "axios";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { MangaListAPIResponse, MangaListProps } from "@/types/type";
+// "use client";
+// import React, { useCallback } from "react";
 
+// import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+
+// import MangaCarousel from "./MangaCarousel";
+// import Loading from "@/app/loading";
+// import Error from "./Error";
+// import Paganation from "./Paganation";
+// import { fetchMangaDetail, fetchSeasonalManga } from "@/lib/api";
+
+// export interface PaginationProps {
+//   category: "popular" | "new" | "trending" | "seasonal";
+//   fetchNextPage?: () => void;
+//   hasNextPage?: boolean;
+//   isFetchingNextPage?: boolean;
+// }
+
+// const MangaList: React.FC<PaginationProps> = ({ category }) => {
+//   const queryClient = useQueryClient();
+//   const handlePrefetch = useCallback(
+//     (id: string) => {
+//       console.log(`Prefetching data for manga with id: ${id}`);
+//       queryClient.prefetchQuery({
+//         queryKey: ["detailManga", id],
+//         queryFn: () => fetchMangaDetail(id),
+//       });
+//     },
+//     [queryClient]
+//   );
+
+//   const {
+//     data: mangaList,
+//     isFetching,
+//     fetchNextPage,
+//     hasNextPage,
+//     isFetchingNextPage,
+//     error,
+//   } = useInfiniteQuery({
+//     queryKey: ["mangaList", category],
+//     queryFn: ({ pageParam = 1 }) => fetchSeasonalManga(pageParam, category),
+
+//     getNextPageParam: (lastPage) =>
+//       lastPage?.length === 20 ? lastPage.length + 1 : undefined,
+//     refetchOnWindowFocus: false,
+//     initialPageParam: 1,
+//   });
+
+//   if (isFetching) return <Loading />;
+
+//   if (error) return <Error message={error.message} />;
+
+//   const mangaListData = mangaList?.pages.flat() ?? [];
+
+//   return (
+//     <div>
+//       <MangaCarousel
+//         handlePrefetch={handlePrefetch}
+//         mangaList={mangaListData}
+//       />
+//       <Paganation
+//         category={category}
+//         fetchNextPage={fetchNextPage}
+//         hasNextPage={hasNextPage ?? false}
+//         isFetchingNextPage={isFetchingNextPage}
+//       />
+//     </div>
+//   );
+// };
+
+// export default MangaList;
+// components/MangaList.tsx (Client Component)
+
+"use client";
+
+import React, { useCallback } from "react";
+import {
+  // useInfiniteQuery,
+  useQueryClient,
+  useSuspenseInfiniteQuery,
+  // useSuspenseInfiniteQuery,
+} from "@tanstack/react-query";
 import MangaCarousel from "./MangaCarousel";
 import Loading from "@/app/loading";
 import Error from "./Error";
 import Paganation from "./Paganation";
-
-// Hàm cấu hình axios mặc định để sử dụng chung
-const axiosInstance = axios.create({
-  baseURL: "/api",
-});
-
-export interface PaginationProps {
-  category: "popular" | "new" | "trending" | "seasonal";
-  fetchNextPage?: () => void;
-  hasNextPage?: boolean;
-  isFetchingNextPage?: boolean; // Đảm bảo kiểu boolean
-}
+import { fetchMangaDetail, fetchSeasonalManga } from "@/lib/api";
+import { PaginationProps } from "@/types/type";
 
 const MangaList: React.FC<PaginationProps> = ({ category }) => {
-  // Hàm fetch dữ liệu manga
-  const fetchMangaList = async (
-    pageParams: number
-  ): Promise<MangaListProps[]> => {
-    const { data } = await axiosInstance.get<MangaListAPIResponse>(
-      "/mangaList",
-      {
-        params: {
-          page: pageParams,
-          limit: 20,
-          category: category,
-        },
-      }
-    );
+  const queryClient = useQueryClient();
 
-    return data.data.map((manga) => {
-      const cover = manga.relationships.find((rel) => rel.type === "cover_art");
-      return {
-        id: manga.id,
-        title: manga.attributes.title.en || "Unknown Title",
-        description:
-          manga.attributes.description.en || "No description available",
-        coverUrl: cover
-          ? `https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}`
-          : "",
-        link: `manga/${manga.id}`,
-      };
-    });
-  };
+  const handlePrefetch = useCallback(
+    (id: string) => {
+      queryClient.prefetchQuery({
+        queryKey: ["detailManga", id],
+        queryFn: () => fetchMangaDetail(id),
+      });
+    },
+    [queryClient]
+  );
 
-  // Sử dụng useInfiniteQuery để quản lý dữ liệu phân trang
   const {
     data: mangaList,
     isFetching,
@@ -60,27 +107,26 @@ const MangaList: React.FC<PaginationProps> = ({ category }) => {
     hasNextPage,
     isFetchingNextPage,
     error,
-  } = useInfiniteQuery({
+  } = useSuspenseInfiniteQuery({
     queryKey: ["mangaList", category],
-    queryFn: ({ pageParam = 1 }) => fetchMangaList(pageParam),
+    queryFn: ({ pageParam = 1 }) => fetchSeasonalManga(pageParam, category),
     getNextPageParam: (lastPage) =>
       lastPage?.length === 20 ? lastPage.length + 1 : undefined,
     refetchOnWindowFocus: false,
     initialPageParam: 1,
   });
 
-  // Nếu đang load dữ liệu, hiển thị Loading
   if (isFetching) return <Loading />;
-
-  // Nếu có lỗi, hiển thị component Error
   if (error) return <Error message={error.message} />;
 
-  // Dữ liệu manga đã được tải
   const mangaListData = mangaList?.pages.flat() ?? [];
 
   return (
     <div>
-      <MangaCarousel mangaList={mangaListData} />
+      <MangaCarousel
+        handlePrefetch={handlePrefetch}
+        mangaList={mangaListData}
+      />
       <Paganation
         category={category}
         fetchNextPage={fetchNextPage}

@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,9 +9,13 @@ interface MangaCardProps {
   manga?: MangaListProps;
 }
 
-const MangaCard: React.FC<MangaCardProps> = ({ manga }) => {
+export default function MangaCard({ manga }: MangaCardProps) {
   if (!manga) {
-    return <div className="p-4">Manga information is not available.</div>;
+    return (
+      <div className="p-4 text-center text-muted-foreground">
+        Manga information is not available.
+      </div>
+    );
   }
 
   const truncateDescription = (description: string, length: number) => {
@@ -21,36 +26,39 @@ const MangaCard: React.FC<MangaCardProps> = ({ manga }) => {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className="h-full "
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.98 }}
+      className="h-full"
     >
-      <Card className=" flex flex-col min-h-[400px] ">
-        <CardHeader>
-          <CardTitle className="text-lg truncate">{manga.title}</CardTitle>
+      <Card className="flex flex-col h-full overflow-hidden">
+        <CardHeader className="p-3 sm:p-4">
+          <CardTitle className="text-base sm:text-lg font-semibold line-clamp-1">
+            {manga?.title}
+          </CardTitle>
         </CardHeader>
-        <CardContent className="flex-grow flex flex-col ">
-          {manga.coverUrl ? (
-            <Image
-              src={manga.coverUrl}
-              alt={manga.title}
-              width={200}
-              height={300}
-              priority={true}
-              className="w-full h-48 object-cover rounded-md mb-2"
-            />
+        <CardContent className="flex-grow flex flex-col p-3 sm:p-4 space-y-2">
+          {manga?.coverUrl ? (
+            <div className="relative w-full pt-[150%] rounded-md overflow-hidden">
+              <Image
+                src={manga.coverUrl}
+                alt={manga.title}
+                fill
+                priority={true}
+                className="object-cover"
+              />
+            </div>
           ) : (
-            <div className="w-full h-48 bg-gray-200 flex items-center justify-center rounded-md mb-2">
-              <span className="text-sm text-gray-500">No Image Available</span>
+            <div className="w-full pt-[150%] bg-muted flex items-center justify-center rounded-md">
+              <span className="text-xs sm:text-sm text-muted-foreground">
+                No Image Available
+              </span>
             </div>
           )}
-          <p className="text-sm flex-grow text-wrap">
-            {truncateDescription(manga.description, 90)}
+          <p className="text-xs sm:text-sm flex-grow line-clamp-4 sm:line-clamp-3">
+            {truncateDescription(manga?.description, 120)}
           </p>
         </CardContent>
       </Card>
     </motion.div>
   );
-};
-
-export default MangaCard;
+}

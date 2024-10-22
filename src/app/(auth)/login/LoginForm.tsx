@@ -6,10 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { InputField } from "@/components/InputField";
-// import { Login as LoginActions } from "./action";
-// import { LoginValues } from "@/validation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-// import { useToast } from "@/hooks/use-toast";
 interface LoginFormProps {
   onSubmit: (e: React.FormEvent) => void;
   setUserName: React.Dispatch<React.SetStateAction<string>>;
@@ -29,35 +26,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
   password,
   setPassword,
 }) => {
-  //   const [username, setUserName] = useState("");
-  //   const [password, setPassword] = useState("");
-  //   const [error, setError] = useState<string | null>(null);
-  //   const [isPending, startTransition] = useTransition();
-  //   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  //   const { toast } = useToast();
-  //   const handleSubmit = async (e: React.FormEvent) => {
-  //     e.preventDefault();
-  //     setError(null);
-  //     startTransition(async () => {
-  //       const values: LoginValues = { username, password };
-  //       const { error } = await LoginActions(values);
-  //       if (error) {
-  //         setError(error);
-  //         toast({
-  //           title: "Error",
-  //           description: error,
-  //           variant: "destructive",
-  //         });
-  //       } else {
-  //         setIsLoggedIn(true);
-  //         toast({
-  //           title: "Success",
-  //           description: "You have successfully logged in!",
-  //         });
-  //       }
-  //     });
-  //   };
-
   return (
     // <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-500 p-4">
     <motion.div
