@@ -3,7 +3,7 @@
 import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Star, TrendingUp, Clock } from "lucide-react";
-import MangaList from "@/components/MangaList"; // Thành phần client-side tương tác
+import MangaList from "@/components/manga/list/MangaList"; // Thành phần client-side tương tác
 
 interface TabsComponentProps {
   defaultCategory: "popular" | "new" | "trending";

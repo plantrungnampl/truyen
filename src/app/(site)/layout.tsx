@@ -1,8 +1,8 @@
 import { validateRequest } from "@/auth";
-import Banner from "@/components/Banner";
-import Navbar from "@/components/Navbar";
+import Banner from "@/components/common/Banner";
 import { redirect } from "next/navigation";
 import SessionProvider from "./sessionProvider";
+import Navbar from "@/components/common/layout/Navbar";
 
 export default async function RootLayout({
   children,

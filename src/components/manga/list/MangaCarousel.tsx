@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import MangaCard from "@/components/MangaCard";
+import MangaCard from "@/components/manga/list/MangaCard";
 import { MangaListProps } from "@/types/type";
 import {
   Carousel,
@@ -24,9 +24,6 @@ const MangaCarousel: React.FC<MangaCarouselProps> = ({
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
 
-  if (!handlePrefetch) {
-    console.error("handlePrefetch is undefined!");
-  }
   return (
     <div className="overflow-hidden flex space-x-4 ">
       <Carousel

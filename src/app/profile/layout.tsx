@@ -30,9 +30,9 @@
 "use server";
 
 import { validateRequest } from "@/auth";
-import Navbar from "@/components/Navbar";
 import { redirect } from "next/navigation";
 import SessionProvider from "../(site)/sessionProvider";
+import Navbar from "@/components/common/layout/Navbar";
 
 export default async function RootLayout({
   children,

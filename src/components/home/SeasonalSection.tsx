@@ -2,7 +2,7 @@
 import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import SeasonalMangaList from "@/components/ClientComponet/SeasonalMangaList";
+import SeasonalMangaList from "@/components/home/SeasonalMangaList";
 
 export default function SeasonalSection() {
   return (

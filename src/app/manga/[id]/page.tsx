@@ -23,7 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Loading from "@/app/loading";
-import Error from "@/components/Error";
+import Error from "@/components/common/Error";
 import { useParams } from "next/navigation";
 import { Response } from "@/types/type";
 import { motion, AnimatePresence } from "framer-motion";
@@ -69,21 +69,6 @@ export default function DetailManga() {
     },
   ]);
 
-  // const fetchMangaDetail = useCallback(
-  //   async (pageParam: number) => {
-  //     const { data } = await axios.get<Response>(`/api/detailManga`, {
-  //       params: {
-  //         id,
-  //         page: pageParam,
-  //         limit: 20,
-  //       },
-  //     });
-  //     console.log("data ==", data);
-
-  //     return data;
-  //   },
-  //   [id]
-  // );
   const fetchMangaDetail = useCallback(
     async (pageParams: number) => {
       try {
@@ -140,19 +125,20 @@ export default function DetailManga() {
     initialPageParam: 1,
     staleTime: 60000,
   });
-  useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (inView && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    }, 200);
+    return () => clearTimeout(timeoutId);
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
   const mangaListData = useMemo(
     () => mangaDetail?.pages?.flat() ?? [],
     [mangaDetail]
   );
   console.log("mangaListData ===", mangaListData);
-
-  // const mangaListData = mangaDetail?.pages?.flat() || [];
 
   const genres = useMemo(
     () =>
@@ -203,8 +189,7 @@ export default function DetailManga() {
   const description =
     mangaListData[0]?.data?.attributes?.description["en"] ??
     "No Description Available";
-  // const readableAtDate = chapter?.attributes?.readableAt;
-  // const formattedDate = formatDate(readableAtDate);
+
   if ((status === "pending" && !isFetchingNextPage) || !mangaListData.length) {
     return <Loading />;
   }
@@ -242,6 +227,7 @@ export default function DetailManga() {
                     alt={title}
                     fill
                     className="object-cover rounded-lg shadow-lg"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 ) : (
                   <div className="bg-gray-200 rounded-lg shadow-lg w-full h-full"></div>
@@ -335,9 +321,7 @@ export default function DetailManga() {
                             </p>
                             <p className="text-sm text-muted-foreground">
                               <Clock className="inline mr-1 h-4 w-4" />
-                              {/* {new Date(
-                                chapter?.attributes?.readableAt
-                              ).toLocaleDateString()} */}
+
                               {formatDate(chapter?.attributes?.readableAt)}
                             </p>
                             <p className="text-sm text-muted-foreground">

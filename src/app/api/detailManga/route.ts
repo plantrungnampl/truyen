@@ -29,7 +29,6 @@ export async function GET(req: Request) {
           manga: id,
           limit,
           offset,
-          // order: JSON.stringify({ chapter: "desc" }),
           order: { chapter: "desc" },
           translatedLanguage: [
             "en",
@@ -48,12 +47,12 @@ export async function GET(req: Request) {
       }),
     ]);
 
-    // Xử lý dữ liệu trả về
-    // const mangaData = mangaDetailRes.data || [];
     const mangaData = mangaDetailRes?.data?.data || {};
 
     const totalChapters = chaptersRes?.data?.total || 0;
+
     const chaptersData = chaptersRes?.data?.data || [];
+    // const currentChapter =
 
     // Tạo dữ liệu trả về kết hợp
     const combinedData = {

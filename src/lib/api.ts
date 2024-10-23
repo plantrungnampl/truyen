@@ -39,3 +39,28 @@ export const fetchMangaDetail = async (id: string) => {
   });
   return data;
 };
+// maanfaadetail rel
+
+export const fetchMangaDetail12 = async (id: string, pageParams: number) => {
+  try {
+    const { data } = await axios.get<Response>(`/api/detailManga`, {
+      params: {
+        id,
+        page: pageParams,
+        limit: 20,
+      },
+    });
+
+    if (!data) {
+      console.warn("No data received, returning empty object");
+      // return { data: {}, chapters: [], total: 0 };
+    }
+
+    console.log("Manga detail fetched:", data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching manga detail:", error);
+    // return { data: {}, chapters: [], total: 0 };
+    // throw error;
+  }
+};

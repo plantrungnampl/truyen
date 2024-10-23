@@ -1,6 +1,5 @@
 import SessionProvider from "@/app/(site)/sessionProvider";
 import { validateRequest } from "@/auth";
-import Navbar from "@/components/Navbar";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -8,8 +7,9 @@ import { Separator } from "@/components/ui/separator";
 import { Search, Menu } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import Filter from "@/components/Filter"; // Import the new Filter component
-import Sidebar from "@/components/Sidebar";
+import Filter from "@/components/manga/list/Filter"; // Import the new Filter component
+import Navbar from "@/components/common/layout/Navbar";
+import Sidebar from "@/components/common/layout/Sidebar";
 
 export default async function RootLayout({
   children,

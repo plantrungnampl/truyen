@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
-import Filter from "./Filter";
+import Filter from "@/components/manga/list/Filter";
 
 type SidebarItem = {
   icon: LucideIcon;

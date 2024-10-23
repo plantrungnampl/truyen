@@ -1,7 +1,7 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { fetchSeasonalManga } from "@/lib/api";
 import { getQueryClient } from "../get-query-client";
-import SeasonalMangaList from "@/components/ClientComponet/SeasonalMangaList";
+import SeasonalMangaList from "@/components/home/SeasonalMangaList";
 import { PaginationProps } from "@/types/type";
 
 export default async function MangaListPage({ category }: PaginationProps) {

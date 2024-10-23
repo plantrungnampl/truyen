@@ -6,7 +6,6 @@ export interface MangaListProps {
   category?: "popular" | "new" | "trending";
   nextCursor?: string | null;
   link?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tags?: any;
 }
 export interface MangaListAPIResponse {
@@ -148,7 +147,7 @@ interface chapter extends Attributes {
   id: string;
   chapter: string;
 }
-interface Data {
+export interface Data {
   id: string;
   type: string;
   attributes: Attributes;
@@ -237,6 +236,8 @@ export interface ChapterDetailResponse {
   response: string;
   data: ChapterDetail;
   pages: string[];
+  nextChapterId: () => void;
+  prevChapterId: () => void;
 }
 
 // pages cua 1 chapter
@@ -255,9 +256,16 @@ export interface ChapterResponse {
 }
 
 //pagination props
+
 export interface PaginationProps {
   category: "popular" | "new" | "trending" | "seasonal";
   fetchNextPage?: () => void;
   hasNextPage?: boolean;
   isFetchingNextPage?: boolean;
+}
+type Category = "popular" | "new" | "trending" | "seasonal";
+
+export interface PageProps {
+  category: Category;
+  searchParams?: { [key: string]: string | undefined };
 }

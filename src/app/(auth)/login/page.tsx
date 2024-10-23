@@ -6,7 +6,7 @@ import { Login as LoginActions } from "./action";
 import { useToast } from "@/hooks/use-toast";
 import { LoginValues } from "@/validation";
 import { AnimatePresence, motion } from "framer-motion";
-import TransitionScreen from "@/components/TransitionScreen";
+import TransitionScreen from "@/components/common/TransitionScreen";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {

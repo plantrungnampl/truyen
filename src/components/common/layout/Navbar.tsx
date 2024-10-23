@@ -27,10 +27,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 // import { useTheme } from "next-themes";
 import { useSession } from "@/app/(site)/sessionProvider";
-import { Avatar } from "./ui/avatar";
 import { useQueryClient } from "@tanstack/react-query";
 import { logout } from "@/app/(auth)/action";
 import { cn } from "@/lib/utils";
+import { Avatar } from "@/components/ui/avatar";
 
 export default function Navbar() {
   const { user } = useSession();

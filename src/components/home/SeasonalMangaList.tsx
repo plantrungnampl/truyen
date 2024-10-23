@@ -6,13 +6,13 @@ import {
   useSuspenseInfiniteQuery,
 } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
-import MangaCarousel from "../MangaCarousel";
+import MangaCarousel from "../manga/list/MangaCarousel";
 import Loading from "@/app/loading";
 
-import Paganation from "../Paganation";
 import { fetchMangaDetail, fetchSeasonalManga } from "@/lib/api";
-import Error from "../Error";
+import Error from "../common/Error";
 import { PaginationProps } from "@/types/type";
+import Paganation from "../common/Paganation";
 const SeasonalMangaList: React.FC<PaginationProps> = ({ category }) => {
   const {
     data: q,

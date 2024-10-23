@@ -1,12 +1,10 @@
 "use client";
 import React, { useCallback } from "react";
-// import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-// import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button } from "./ui/button";
 import { fetchSeasonalManga } from "@/lib/api";
 import { PaginationProps } from "@/types/type";
+import { Button } from "@/components/ui/button";
 
 const Paganation: React.FC<PaginationProps> = ({ category }) => {
   const router = useRouter();
@@ -17,7 +15,6 @@ const Paganation: React.FC<PaginationProps> = ({ category }) => {
   const queryClient = useQueryClient();
 
   const handlePrefetch = useCallback(() => {
-    console.log(`xem them prefetch ${category}`);
     queryClient.prefetchQuery({
       queryKey: ["seasonalManga", "mangaList", category],
       queryFn: () => fetchSeasonalManga(1, category),

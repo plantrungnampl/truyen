@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/app/loading";
-import Error from "@/components/Error";
+import Error from "@/components/common/Error";
 import { MangaListAPIResponse, MangaListProps } from "@/types/type";
 import { Button } from "@/components/ui/button";
 import { Clock, Loader2, Star, TrendingUp } from "lucide-react";

@@ -1,10 +1,8 @@
 "use client";
 import React from "react";
-import ExploreSection from "@/components/ExploreSection";
-import SeasonalSection from "@/components/SeasonalSection";
-// import dynamic from "next/dynamic";
-// const ExploreSection = dynamic(() => import("@/components/ExploreSection"));
-// const SeasonalSection = dynamic(() => import("@/components/SeasonalSection"));
+import ExploreSection from "@/components/home/ExploreSection";
+import SeasonalSection from "@/components/home/SeasonalSection";
+
 export default function Home() {
   // if (typeof window === "undefined") {
   //   console.log("Rendering on the server");

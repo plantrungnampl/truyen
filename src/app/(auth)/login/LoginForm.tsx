@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { InputField } from "@/components/InputField";
+import { InputField } from "@/components/common/InputField";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 interface LoginFormProps {
   onSubmit: (e: React.FormEvent) => void;
