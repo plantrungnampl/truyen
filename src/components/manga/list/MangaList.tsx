@@ -12,7 +12,7 @@ import Error from "../../common/Error";
 import { fetchMangaDetail, fetchSeasonalManga } from "@/lib/api";
 // import { PaginationProps } from "@/types/type";
 import Paganation from "../../common/Paganation";
-type Category = "popular" | "new" | "trending" | "seasonal";
+type Category = "popular" | "new" | "trending" | "seasonal" | string;
 
 interface MangaListProps {
   category: Category;

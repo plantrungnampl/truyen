@@ -2,9 +2,13 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { fetchSeasonalManga } from "@/lib/api";
 import { getQueryClient } from "../get-query-client";
 import SeasonalMangaList from "@/components/home/SeasonalMangaList";
-import { PaginationProps } from "@/types/type";
+import { PageProps } from "../mangalist/page";
+import { Suspense } from "react";
+import Loading from "../loading";
 
-export default async function MangaListPage({ category }: PaginationProps) {
+export default async function MangaListPage({ params }: PageProps) {
+  const paramsPromise = await params;
+  const { category } = paramsPromise;
   const queryClient = getQueryClient();
   // Prefetch dữ liệu trên server
   await queryClient.prefetchInfiniteQuery({
@@ -18,7 +22,9 @@ export default async function MangaListPage({ category }: PaginationProps) {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <SeasonalMangaList category={category} />
+      <Suspense fallback={<Loading />}>
+        <SeasonalMangaList category={category} />
+      </Suspense>
     </HydrationBoundary>
   );
 }

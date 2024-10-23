@@ -258,7 +258,7 @@ export interface ChapterResponse {
 //pagination props
 
 export interface PaginationProps {
-  category: "popular" | "new" | "trending" | "seasonal";
+  category: "popular" | "new" | "trending" | "seasonal" | string;
   fetchNextPage?: () => void;
   hasNextPage?: boolean;
   isFetchingNextPage?: boolean;

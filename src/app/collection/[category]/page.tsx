@@ -214,9 +214,9 @@ const CollectionPage: React.FC = () => {
                       {manga.title}
                     </h2>
                     <div className="flex flex-wrap gap-2 ">
-                      {manga.tags
-                        .slice(0, 3)
-                        .map((tag: string, index: number) => (
+                      {manga?.tags
+                        ?.slice(0, 3)
+                        ?.map((tag: string, index: number) => (
                           <Badge key={index} variant="secondary">
                             {tag}
                           </Badge>

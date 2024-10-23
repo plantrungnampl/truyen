@@ -1,106 +1,53 @@
-// // import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-// // import MangaList from "@/components/manga/list/MangaList";
-// // import { fetchSeasonalManga } from "@/lib/api";
-// // import { getQueryClient } from "../get-query-client";
-// // import { PaginationProps } from "@/types/type";
-// // type MangaListPageProps = {
-// //   category: PaginationProps["category"];
-// // };
-// // export default async function MangaListPage({ category }: MangaListPageProps) {
-// //   const queryClient = getQueryClient();
-
-// //   await queryClient.prefetchInfiniteQuery({
-// //     queryKey: ["mangaList", category],
-// //     queryFn: ({ pageParam = 1 }) => fetchSeasonalManga(pageParam, category),
-// //     initialPageParam: 1,
-// //   });
-
-// //   const dehydratedState = dehydrate(queryClient);
-
-// //   return (
-// //     <HydrationBoundary state={dehydratedState}>
-// //       <MangaList category={category} />
-// //     </HydrationBoundary>
-// //   );
-// // }
-// // app/mangalist/page.tsx
-// import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-// import MangaList from "@/components/manga/list/MangaList";
-// import { fetchSeasonalManga } from "@/lib/api";
-// import { getQueryClient } from "../get-query-client";
-// import { PaginationProps } from "@/types/type";
-
-// interface PageProps {
-//   params: {
-//     category: PaginationProps["category"];
-//   };
-//   searchParams: { [key: string]: string | undefined };
-// }
-
-// export default async function MangaListPage({ params }: PageProps) {
-//   const { category } = params;
-
-//   const queryClient = getQueryClient();
-
-//   await queryClient.prefetchInfiniteQuery({
-//     queryKey: ["mangaList", category],
-//     queryFn: ({ pageParam = 1 }) => fetchSeasonalManga(pageParam, category),
-//     initialPageParam: 1,
-//   });
-
-//   const dehydratedState = dehydrate(queryClient);
-
-//   return (
-//     <HydrationBoundary state={dehydratedState}>
-//       <MangaList category={category} />
-//     </HydrationBoundary>
-//   );
-// }
-// app/mangalist/page.tsx
-
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import MangaList from "@/components/manga/list/MangaList";
 import { fetchSeasonalManga } from "@/lib/api";
 import { getQueryClient } from "../get-query-client";
-import { Metadata } from "next";
-import { PageProps } from "@/types/type";
+import { Suspense } from "react";
+import Loading from "../loading";
+export type PageProps = {
+  params: Promise<{ category: string }>;
+};
 
-// Xử lý generateMetadata
-export async function generateMetadata({
-  category,
-}: PageProps): Promise<Metadata> {
-  return {
-    title: `Manga List - ${category}`,
-  };
-}
+export default async function MangaListPage({ params }: PageProps) {
+  const resolvedParams = await params; // Giải quyết Promise của params
 
-// Xử lý generateStaticParams
-export async function generateStaticParams() {
-  return [
-    { category: "popular" },
-    { category: "new" },
-    { category: "trending" },
-    { category: "seasonal" },
-  ];
-}
-
-// Component chính
-export default async function MangaListPage({ category }: PageProps) {
-  // const { category } = params;
+  const { category } = resolvedParams; // Lấy category từ params đã giải quyết
 
   const queryClient = getQueryClient();
+  try {
+    await queryClient.prefetchInfiniteQuery({
+      queryKey: ["mangaList", category],
+      queryFn: ({ pageParam = 1 }) => fetchSeasonalManga(pageParam, category),
+      initialPageParam: 1,
+    });
 
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: ["mangaList", category],
-    queryFn: ({ pageParam = 1 }) => fetchSeasonalManga(pageParam, category),
-    initialPageParam: 1,
-  });
+    const dehydratedState = dehydrate(queryClient);
 
-  const dehydratedState = dehydrate(queryClient);
+    return (
+      <HydrationBoundary state={dehydratedState}>
+        <Suspense fallback={<Loading />}>
+          <MangaList category={category} />
+        </Suspense>
+      </HydrationBoundary>
+    );
+  } catch (err) {
+    console.log("mamama===", err);
+    return <div>Failed to load manga list. Please try again later.</div>;
+  }
 
-  return (
-    <HydrationBoundary state={dehydratedState}>
-      <MangaList category={category} />
-    </HydrationBoundary>
-  );
+  // await queryClient.prefetchInfiniteQuery({
+  //   queryKey: ["mangaList", category],
+  //   queryFn: ({ pageParam = 1 }) => fetchSeasonalManga(pageParam, category),
+  //   initialPageParam: 1,
+  // });
+
+  // const dehydratedState = dehydrate(queryClient);
+
+  // return (
+  //   <HydrationBoundary state={dehydratedState}>
+  //     <Suspense fallback={<Loading />}>
+  //       <MangaList category={category} />
+  //     </Suspense>
+  //   </HydrationBoundary>
+  // );
 }
