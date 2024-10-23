@@ -9,9 +9,12 @@ import {
 import MangaCarousel from "./MangaCarousel";
 import Loading from "@/app/loading";
 import Error from "../../common/Error";
-import { fetchMangaDetail, fetchSeasonalManga } from "@/lib/api";
+import { fetchMangaDetail } from "@/lib/api";
 // import { PaginationProps } from "@/types/type";
 import Paganation from "../../common/Paganation";
+import axios from "axios";
+import { MangaListAPIResponse } from "@/types/type";
+import { fetchSeasonalManga } from "../../../lib/api";
 type Category = "popular" | "new" | "trending" | "seasonal" | string;
 
 interface MangaListProps {
