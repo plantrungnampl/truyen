@@ -20,13 +20,13 @@ export default function ExploreSection() {
             <TabTrigger value="trending" icon={TrendingUp} label="Xu hướng" />
           </TabsList>
           <TabsContent value="popular">
-            <MangaList category="popular" />
+            <MangaList category="popular" id="" />
           </TabsContent>
           <TabsContent value="new">
-            <MangaList category="new" />
+            <MangaList category="new" id="" />
           </TabsContent>
           <TabsContent value="trending">
-            <MangaList category="trending" />
+            <MangaList category="trending" id="" />
           </TabsContent>
         </Tabs>
       </CardContent>

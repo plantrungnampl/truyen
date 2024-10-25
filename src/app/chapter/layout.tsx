@@ -1,4 +1,3 @@
-"use server";
 import { validateRequest } from "@/auth";
 import { redirect } from "next/navigation";
 import SessionProvider from "../(site)/sessionProvider";

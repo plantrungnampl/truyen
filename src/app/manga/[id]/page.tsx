@@ -44,7 +44,12 @@ const slideUp = {
   hidden: { y: 20, opacity: 0 },
   visible: { y: 0, opacity: 1, transition: { duration: 0.5 } },
 };
-
+// export const fetchMangaDetail = async (id: string) => {
+//   const { data } = await axios.get(`/api/detailManga`, {
+//     params: { id },
+//   });
+//   return data;
+// };
 export default function DetailManga() {
   const params = useParams();
   const id = params?.id;

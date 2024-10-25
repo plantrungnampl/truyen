@@ -41,7 +41,7 @@ export default function MangaCard({ manga }: MangaCardProps) {
             <div className="relative w-full pt-[150%] rounded-md overflow-hidden">
               <Image
                 src={manga.coverUrl}
-                alt={manga.title}
+                alt={manga.title ?? ""}
                 fill
                 priority={true}
                 className="object-cover"
@@ -56,7 +56,7 @@ export default function MangaCard({ manga }: MangaCardProps) {
             </div>
           )}
           <p className="text-xs sm:text-sm flex-grow line-clamp-4 sm:line-clamp-3">
-            {truncateDescription(manga?.description, 120)}
+            {truncateDescription(manga?.description ?? "", 120)}
           </p>
         </CardContent>
       </Card>

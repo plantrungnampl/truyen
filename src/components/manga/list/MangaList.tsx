@@ -1,73 +1,101 @@
 "use client";
-import React, { useCallback } from "react";
+import React, {useCallback} from "react";
 import {
-  // useInfiniteQuery,
-  useQueryClient,
-  useSuspenseInfiniteQuery,
-  // useSuspenseInfiniteQuery,
+    useQueryClient,
+    useSuspenseInfiniteQuery,
 } from "@tanstack/react-query";
 import MangaCarousel from "./MangaCarousel";
 import Loading from "@/app/loading";
 import Error from "../../common/Error";
-import { fetchMangaDetail } from "@/lib/api";
-// import { PaginationProps } from "@/types/type";
+
 import Paganation from "../../common/Paganation";
 import axios from "axios";
-import { MangaListAPIResponse } from "@/types/type";
-import { fetchSeasonalManga } from "../../../lib/api";
-type Category = "popular" | "new" | "trending" | "seasonal" | string;
+import {MangaListAPIResponse} from "@/types/type";
 
-interface MangaListProps {
-  category: Category;
-}
-const MangaList: React.FC<MangaListProps> = ({ category }) => {
-  const queryClient = useQueryClient();
+export const fetchMangaDetail = async (id: string) => {
+    const {data} = await axios.get(`/api/detailManga`, {
+        params: {id},
+    });
+    return data;
+};
+import {MangaListProps} from "../../../types/type";
 
-  const handlePrefetch = useCallback(
-    (id: string) => {
-      queryClient.prefetchQuery({
-        queryKey: ["detailManga", id],
-        queryFn: () => fetchMangaDetail(id),
-      });
-    },
-    [queryClient]
-  );
+const MangaList: React.FC<MangaListProps> = ({category}) => {
+    const fetchSeasonalManga = async (
+        pageParams: number
+    ): Promise<MangaListProps[]> => {
+        const {data} = await axios.get<MangaListAPIResponse>(
+            `http://localhost:3000/api/mangaList`,
+            {
+                params: {
+                    page: pageParams,
+                    limit: 20,
+                    category: category,
+                },
+            }
+        );
 
-  const {
-    data: mangaList,
-    isFetching,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    error,
-  } = useSuspenseInfiniteQuery({
-    queryKey: ["mangaList", category],
-    queryFn: ({ pageParam = 1 }) => fetchSeasonalManga(pageParam, category),
-    getNextPageParam: (lastPage) =>
-      lastPage?.length === 20 ? lastPage.length + 1 : undefined,
-    refetchOnWindowFocus: false,
-    initialPageParam: 1,
-  });
+        return data.data.map((manga) => {
+            const cover = manga.relationships.find((rel) => rel.type === "cover_art");
+            return {
+                id: manga.id,
+                title: manga.attributes.title.en || "Unknown Title",
+                description:
+                    manga.attributes.description.en || "No description available",
+                coverUrl: cover
+                    ? `https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}`
+                    : "",
+                link: `manga/${manga.id}`,
+            };
+        });
+    };
+    const queryClient = useQueryClient();
 
-  if (isFetching) return <Loading />;
-  if (error) return <Error message={error.message} />;
+    const handlePrefetch = useCallback(
+        (id: string) => {
+            queryClient.prefetchQuery({
+                queryKey: ["detailManga", id],
+                queryFn: () => fetchMangaDetail(id),
+            });
+        },
+        [queryClient]
+    );
 
-  const mangaListData = mangaList?.pages.flat() ?? [];
+    const {
+        data: mangaList,
+        isFetching,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        error,
+    } = useSuspenseInfiniteQuery({
+        queryKey: ["mangaList", category],
+        queryFn: ({pageParam = 1}) => fetchSeasonalManga(pageParam),
+        getNextPageParam: (lastPage) =>
+            lastPage?.length === 20 ? lastPage.length + 1 : undefined,
+        refetchOnWindowFocus: false,
+        initialPageParam: 1,
+    });
 
-  return (
-    <div>
-      <MangaCarousel
-        handlePrefetch={handlePrefetch}
-        mangaList={mangaListData}
-      />
-      <Paganation
-        category={category}
-        fetchNextPage={fetchNextPage}
-        hasNextPage={hasNextPage ?? false}
-        isFetchingNextPage={isFetchingNextPage}
-      />
-    </div>
-  );
+    if (isFetching) return <Loading/>;
+    if (error) return <Error message={error.message}/>;
+
+    const mangaListData = mangaList?.pages.flat() ?? [];
+
+    return (
+        <div>
+            <MangaCarousel
+                handlePrefetch={handlePrefetch}
+                mangaList={mangaListData}
+            />
+            <Paganation
+                category={category ?? "popular"}
+                fetchNextPage={fetchNextPage}
+                hasNextPage={hasNextPage ?? false}
+                isFetchingNextPage={isFetchingNextPage}
+            />
+        </div>
+    );
 };
 
 export default MangaList;

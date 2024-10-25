@@ -81,8 +81,8 @@ export default function Banner() {
           {/* Background blur */}
           <div className="absolute inset-0 overflow-hidden">
             <Image
-              src={bannerData[currentSlide].coverUrl}
-              alt={bannerData[currentSlide].title}
+              src={bannerData[currentSlide].coverUrl ?? ""}
+              alt={bannerData[currentSlide].title ?? ""}
               fill
               style={{
                 objectFit: "cover",
@@ -95,8 +95,8 @@ export default function Banner() {
           {/* Main image */}
           <div className="absolute inset-0 flex items-center justify-center">
             <Image
-              src={bannerData[currentSlide].coverUrl}
-              alt={bannerData[currentSlide].title}
+              src={bannerData[currentSlide].coverUrl ?? ""}
+              alt={bannerData[currentSlide].title ?? ""}
               fill
               style={{
                 objectFit: "contain",

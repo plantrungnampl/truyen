@@ -39,7 +39,7 @@ const MangaCarousel: React.FC<MangaCarouselProps> = ({
               key={`${manga?.id}-${index}`}
             >
               <Link
-                onMouseEnter={() => handlePrefetch(manga?.id)}
+                onMouseEnter={() => handlePrefetch(manga?.id ?? "")}
                 href={`${manga?.link}`}
               >
                 <div className="p-1">

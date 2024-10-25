@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Clock, Loader2, Star, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { fetchMangaDetail } from "@/lib/api";
+import { fetchMangaDetail } from "@/components/manga/list/MangaList";
 
 const CollectionPage: React.FC = () => {
   const params = useParams();
@@ -80,6 +80,7 @@ const CollectionPage: React.FC = () => {
             }`
           : "",
         tags: manga.attributes.tags.map((tag) => tag.attributes.name.en),
+        category: categories,
       }));
     },
 
@@ -158,6 +159,7 @@ const CollectionPage: React.FC = () => {
   const handleMangaClick = (id: string) => {
     router.push(`/manga/${id}`);
   };
+
   return (
     <motion.div
       className="container mx-auto mt-8 "
@@ -192,8 +194,8 @@ const CollectionPage: React.FC = () => {
               variants={itemVariants}
               layout
               className="cursor-pointer"
-              onClick={() => handleMangaClick(manga.id)}
-              onMouseEnter={() => handlePrefetch(manga.id)}
+              onClick={() => handleMangaClick(manga.id ?? "")}
+              onMouseEnter={() => handlePrefetch(manga.id ?? "")}
             >
               <motion.div
                 className="bg-card text-card-foreground rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
@@ -202,8 +204,8 @@ const CollectionPage: React.FC = () => {
               >
                 <div className="relative h-[400px]">
                   <Image
-                    src={manga.coverUrl}
-                    alt={manga.title}
+                    src={manga.coverUrl ?? ""}
+                    alt={manga.title ?? ""}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="w-full h-full object-cover"

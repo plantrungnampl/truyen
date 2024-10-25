@@ -4,9 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  // Moon,
-  // Sun,
-  Search,
+
   Menu,
   X,
   BookOpen,
@@ -16,7 +14,6 @@ import {
   LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,25 +22,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// import { useTheme } from "next-themes";
 import { useSession } from "@/app/(site)/sessionProvider";
 import { useQueryClient } from "@tanstack/react-query";
 import { logout } from "@/app/(auth)/action";
 import { cn } from "@/lib/utils";
 import { Avatar } from "@/components/ui/avatar";
+import SearchBar from "../Search";
 
 export default function Navbar() {
   const { user } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
-  // const { theme, setTheme } = useTheme();
+
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
-  // const [mounted, setMounted] = useState(false);
   const queryClient = useQueryClient();
 
-  // useEffect(() => setMounted(true), []);
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -61,14 +55,6 @@ export default function Navbar() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
-      setIsMenuOpen(false);
-    }
-  };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -101,13 +87,14 @@ export default function Navbar() {
                   >
                     <item.icon className="inline-block h-4 w-4 mr-2" />
                     {item.name}
+                  
                   </Link>
                 ))}
               </div>
             </div>
           </div>
           <div className="hidden md:flex items-center space-x-4">
-            <form onSubmit={handleSearch} className="flex items-center">
+            {/* <form onSubmit={handleSearch} className="flex items-center">
               <Input
                 type="text"
                 placeholder="Search manga..."
@@ -118,20 +105,10 @@ export default function Navbar() {
               <Button type="submit" size="icon">
                 <Search className="h-4 w-4" />
               </Button>
-            </form>
-            {/* {mounted && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              >
-                {theme === "light" ? (
-                  <Moon className="h-5 w-5" />
-                ) : (
-                  <Sun className="h-5 w-5" />
-                )}
-              </Button>
-            )} */}
+            </form> */}
+            <div className="flex items-center">
+              <SearchBar />
+            </div>
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -205,7 +182,7 @@ export default function Navbar() {
             ))}
           </div>
           <div className="px-2 pt-2 pb-3">
-            <form onSubmit={handleSearch} className="flex items-center">
+            {/* <form onSubmit={handleSearch} className="flex items-center">
               <Input
                 type="text"
                 placeholder="Search manga..."
@@ -216,7 +193,7 @@ export default function Navbar() {
               <Button type="submit" size="sm">
                 <Search className="h-4 w-4" />
               </Button>
-            </form>
+            </form> */}
             <div className="mt-3 space-y-2">
               {user ? (
                 <>

@@ -1,17 +1,21 @@
+type Category = "popular" | "new" | "trending" | "seasonal" | string;
 export interface MangaListProps {
-  id: string;
-  title: string;
-  description: string;
-  coverUrl: string;
-  category?: "popular" | "new" | "trending";
+  id?: string;
+  title?: string;
+  description?: string;
+  coverUrl?: string;
+  category?: Category;
   nextCursor?: string | null;
   link?: string;
   tags?: any;
 }
+
 export interface MangaListAPIResponse {
   data: Array<{
     id: string;
     attributes: {
+      status: string;
+      year: number;
       tags: Array<{
         attributes: {
           name: {
@@ -43,13 +47,13 @@ export interface MangaListAPIResponse {
     };
     relationships: Array<{
       type: string;
-      attributes: { fileName: string };
+      attributes: { fileName: string; name?: string };
     }>;
   }>;
 }
-export interface MangaGridProps {
-  category?: "popular" | "new" | "trending";
-}
+// export interface MangaGridProps {
+//   category?: "popular" | "new" | "trending";
+// }
 
 // Detail Manga
 // Interface for Titles
@@ -263,7 +267,7 @@ export interface PaginationProps {
   hasNextPage?: boolean;
   isFetchingNextPage?: boolean;
 }
-type Category = "popular" | "new" | "trending" | "seasonal";
+// type Category = "popular" | "new" | "trending" | "seasonal";
 
 export interface PageProps {
   category: Category;

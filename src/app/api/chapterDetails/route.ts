@@ -129,6 +129,7 @@ export async function GET(req: Request) {
             "ja-ro",
             "ko-ro",
             "zh-ro",
+            "vi",
           ],
           includes: ["manga"],
           limit: 100, // Add limit to avoid too many results

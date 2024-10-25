@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+
     // webpack: (config, { isServer }) => {
     //     if (isServer) {
     //         config.externals.push('@prisma/client')
@@ -26,14 +27,19 @@ const nextConfig = {
                 hostname: "cmdxd98sb0x3yprd.mangadex.network",
                 port: '',
                 pathname: '/**',
+            },
+            {
+                protocol: "https",
+                hostname: "assets.vercel.com",
+                port: '',
+                pathname: "/**"
             }
         ],
     },
 
-    // experimental: {
 
-    serverExternalPackages: ["@node-rs/argon2"]
-    // },
+    serverExternalPackages: ["@node-rs/argon2"],
+
 };
 
 export default nextConfig;
